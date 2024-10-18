@@ -1,7 +1,7 @@
 const AnalyticsPage = () => {
   return (
     <div>
-     Analytics page
+     Analytics page UI
     </div>
   )
 }
