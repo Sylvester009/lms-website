@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Pencil, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -21,14 +21,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Chapter, Course } from "@prisma/client";
 import { Input } from "@/components/ui/input";
+import { ChaptersList } from "./chapters-list";
 
 interface ChapterFormProps {
-  initialData: Course & { chapters: Chapter[]};
+  initialData: Course & { chapters: Chapter[] };
   courseId: string;
 }
 
 const formSchema = z.object({
-   title: z.string().min(1),
+  title: z.string().min(1),
 });
 
 export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
@@ -42,8 +43,8 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: ""
-    }
+      title: "",
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -58,8 +59,36 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
       toast.error("Course Chapter not updated");
     }
   };
+
+  const onReOrder = async (
+    singleUpdateData: { id: string; position: number }[]
+  ) => {
+    try {
+      setIsUpdating(true);
+
+      await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+        list: singleUpdateData,
+      });
+      toast.success("Course Chapters reordered");
+      router.refresh();
+    } catch {
+      toast.error("Course Chapter not reordered");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const onEdit = (id: string) => {
+    router.push(`/teacher/courses/${courseId}/chapters/${id}`);
+  };
+
   return (
-    <div className="mt-6 border bg-orange-100 rounded-md p-4">
+    <div className=" relative mt-6 border bg-orange-100 rounded-md p-4">
+      {isUpdating && (
+        <div className="absolute h-full w-full bg-orange-500/20 top-0 right-0 rounded-m flex items-center justify-center">
+          <Loader2 className="animate-spin h-6 w-6 text-orange-700" />
+        </div>
+      )}
       <div className="font-medium flex items-center justify-between">
         Course Chapter
         <Button onClick={toggleCreating} variant="ghost">
@@ -94,21 +123,26 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
                 </FormItem>
               )}
             />
-            
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Create
-              </Button>
-            
+
+            <Button disabled={!isValid || isSubmitting} type="submit">
+              Create
+            </Button>
           </form>
         </Form>
       )}
       {!isCreating && (
-        <div className={cn(
-          "text-sm mt-2",
-          !initialData.chapters.length && "text-orange-500 italic"
-        )}>
+        <div
+          className={cn(
+            "text-sm mt-2",
+            !initialData.chapters.length && "text-orange-500 italic"
+          )}
+        >
           {!initialData.chapters.length && "No chapters"}
-          {/*TODO: ADD chapter lists */}
+          <ChaptersList
+            onEdit={onEdit}
+            onReOrder={onReOrder}
+            items={initialData.chapters || []}
+          />
         </div>
       )}
       {!isCreating && (
