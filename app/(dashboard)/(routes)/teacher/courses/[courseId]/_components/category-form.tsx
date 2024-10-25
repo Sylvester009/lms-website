@@ -91,8 +91,8 @@ export const CategoryForm = ({ initialData, courseId, options }: CategoryFormPro
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <ComboBox 
-                    options={...options}
+                    <ComboBox
+                    options={options}
                     {...field}
                     />
                   </FormControl>
