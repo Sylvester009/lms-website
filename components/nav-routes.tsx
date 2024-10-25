@@ -5,13 +5,22 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import SearchInput from "./searchinput";
 
 export const NavbarRoutes = () => {
   const pathName = usePathname();
 
   const isTeacherPage = pathName?.startsWith("/teacher");
   const isStudentPage = pathName.includes("/chapter");
+  const isSearchPage = pathName === "/search";
+
   return (
+    <>
+    {isSearchPage && (
+      <div className="hidden md:block">
+        <SearchInput />
+      </div>
+    )}
     <div className="flex gap-x-2 ml-auto">
       {isTeacherPage || isStudentPage ? (
         <Link href="/">
@@ -29,5 +38,6 @@ export const NavbarRoutes = () => {
       )}
       <UserButton afterSignOutUrl="/" />
     </div>
+    </>
   );
 };
