@@ -23,7 +23,7 @@ export async function PUT (
         });
 
         if (!courseOwner) {
-            return new NextResponse("Forbidden", { status: 403 });
+            return new NextResponse("Unauthorized Owner", { status: 403 });
         }
 
         for (let item of list) {
