@@ -1,4 +1,4 @@
-// Micheal
+
 
 const { PrismaClient } = require("@prisma/client");
 
@@ -14,10 +14,12 @@ async function main() {
                 {name: "Web Design"},
                 {name: "Graphics"},
                 {name: "Modelling"},
+                {name: "Odoo ERP"},
+                {name: "Accounting"},
             ]
         });
 
-        console.log("Success made")
+        console.log("Category Pull Successful")
     } catch (err) {
         console.log("Error seeding db categories: ", err)
     } finally {
