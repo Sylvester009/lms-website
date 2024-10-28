@@ -117,6 +117,7 @@ model Purchase {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    status    String?     // e.g., "completed", "pending", "failed"
 
     @@index([courseId])
 }
