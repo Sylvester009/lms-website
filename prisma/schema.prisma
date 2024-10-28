@@ -51,6 +51,7 @@ model Attachment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   courseId  String   @db.ObjectId
+  type      String?  //video, document etc
 
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
