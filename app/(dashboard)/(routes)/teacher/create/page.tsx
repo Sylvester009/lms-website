@@ -43,53 +43,59 @@ const CreateCoursePage = () => {
       router.push(`/teacher/courses/${response.data.id}`);
       toast.success("Course Created");
     } catch {
-      toast.error("Opp, Something is not right");
+      toast.error("Oops, something went wrong");
     }
   };
 
   return (
-    <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
-      <div>
-        <h1 className="text-2xl">Name of Course</h1>
-        <p className="text-sm text-orange-600">Give a name to your course.</p>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 mt-8"
-          >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course title</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      placeholder="e.g. Computer Science"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    What would like to teach in this course?
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex items-center gap-x-2">
-              <Link href="/">
-                <Button type="button" variant="ghost">
-                  cancel
-                </Button>
-              </Link>
-              <Button type="submit" disabled={!isValid || isSubmitting}>
-                Continue
-              </Button>
-            </div>
-          </form>
-        </Form>
+    <div className="max-w-3xl mx-auto flex flex-col justify-center h-full p-8 md:p-12 space-y-6">
+      {/* Page Header */}
+      <div className="text-center space-y-2">
+        <h1 className="text-3xl font-semibold text-gray-800">Create a New Course</h1>
+        <p className="text-md text-orange-500">Provide a name and details for your course.</p>
       </div>
+
+      {/* Form Section */}
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-6 bg-orange-50 p-6 rounded-lg shadow-md"
+        >
+          {/* Title Field */}
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-lg font-medium">Course Title</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isSubmitting}
+                    placeholder="e.g., Introduction to Computer Science"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className="text-sm text-orange-500 mt-2">
+                  Give a clear, concise name to your course.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          {/* Action Buttons */}
+          <div className="flex justify-end space-x-4">
+            <Link href="/">
+              <Button type="button" variant="ghost" disabled={isSubmitting}>
+                Cancel
+              </Button>
+            </Link>
+            <Button type="submit" disabled={!isValid || isSubmitting}>
+              {isSubmitting ? "Creating..." : "Create Course"}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
