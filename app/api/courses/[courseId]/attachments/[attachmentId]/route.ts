@@ -38,4 +38,4 @@ export async function DELETE (request: Request,
     console.log("Attachment Id", error);
     return new NextResponse("Internal Error",  { status: 500 });
    }
-}
+        }
