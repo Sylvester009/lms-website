@@ -2,7 +2,7 @@ import { SignUp } from '@clerk/nextjs'
 
 export default function Page() {
   return (
-    <div className="flex h-screen bg-orange-100 w-full">
+    <div className="flex h-screen bg-orange-100">
       {/* Left Content Section */}
       <div className="hidden md:flex w-1/2 text-orange-800 p-12 flex-col justify-center">
         <h1 className="text-5xl font-extrabold leading-tight mb-6">
